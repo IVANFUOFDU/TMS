@@ -25,6 +25,11 @@ public class TaskManager {
                 .findFirst();
     }
 
+    // READ ALL
+    public List<Task> getAll() {
+        return taskList;
+    }
+
     // UPDATE
     public boolean update(int id, String newTitle, String newDescription, LocalDateTime newDate, Priority newPriority) {
         Optional<Task> taskOptional = getById(id);
