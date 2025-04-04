@@ -9,14 +9,14 @@ public class Task {
     private Category category;
     private boolean isComplete;
 
-    public Task(int id, String title, String description, LocalDateTime date, Priority priority, Category category, boolean isComplete) {
+    public Task(int id, String title, String description, LocalDateTime date, Priority priority, Category category) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.date = date;
         this.priority = priority;
         this.category = category;
-        this.isComplete = isComplete;
+        this.isComplete = false;
     }
 
     public String getTitle() {
