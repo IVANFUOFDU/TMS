@@ -31,7 +31,7 @@ public class TaskManager {
     }
 
     // UPDATE
-    public boolean update(int id, String newTitle, String newDescription, LocalDateTime newDate, Priority newPriority) {
+    public boolean update(int id, String newTitle, String newDescription, LocalDateTime newDate, Priority newPriority, Category newCategory) {
         Optional<Task> taskOptional = getById(id);
 
         if (taskOptional.isPresent()) {
@@ -40,6 +40,7 @@ public class TaskManager {
             task.setDescription(newDescription);
             task.setDate(newDate);
             task.setPriority(newPriority);
+            task.setCategory(newCategory);
             return true;
         }
         return false;
