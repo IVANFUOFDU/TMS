@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -45,8 +46,63 @@ public class Main {
         }
     }
 
+    public static String getStringInput(String prompt) {
+        System.out.println(prompt);
+        return scanner.nextLine().trim();
+    }
+
+    public static LocalDateTime getDateTimeInput(String prompt) {
+        while (true) {
+            try {
+                System.out.println(prompt);
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty())
+                    return null;
+                return LocalDateTime.parse(input);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Use YYYY-MM-DDT:HH:MM");
+            }
+        }
+    }
+
+    public static Priority getPriorityInput() {
+        while (true)
+            try {
+                System.out.println("Enter priority (LOW/MEDIUM/HIGH) [default: MEDIUM]");
+                String input = scanner.nextLine().trim().toUpperCase();
+                if (input.isEmpty())
+                    return Priority.MEDIUM;
+                return Priority.valueOf(input);
+            } catch (IllegalArgumentException exception) {
+                System.out.println("invalid priority. Choose from LOW/MEDIUM/HIGH");
+            }
+    }
+
+
+    public static Category getCategoryInput() {
+        while (true)
+            try {
+                System.out.println("Enter category (WORK/PERSONAL) [default: PERSONAL]");
+                String input = scanner.nextLine().trim().toUpperCase();
+                if (input.isEmpty())
+                    return Category.PERSONAL;
+                return Category.valueOf(input);
+            } catch (IllegalArgumentException exception) {
+                System.out.println("Invalid category. Choose from WORK/PERSONAL");
+            }
+    }
+
+
     public static void addTask() {
         System.out.println("\n---> Add Task <---");
+        String title = getStringInput("Enter title: ");
+        String description = getStringInput("Enter description: ");
+        LocalDateTime dueDate = getDateTimeInput("Enter due date (YYYY-MM-DDT:HH:MM)");
+        Priority priority = getPriorityInput();
+        Category category = getCategoryInput();
+
+        manager.add(title, description, dueDate, priority, category);
+        System.out.println("Task added successfully.");
     }
 
     public static void listTask() {
@@ -81,6 +137,7 @@ public class Main {
         }
 
         System.out.println("\n---> Update Task <---");
+
     }
 
     public static void deleteTask() {
