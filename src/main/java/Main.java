@@ -19,11 +19,39 @@ public class Main {
                 case 2 -> listTask();
                 case 3 -> updateTask();
                 case 4 -> deleteTask();
-                case 5 -> running = false;
+                case 5 -> completeTask();
+                case 6 -> running = false;
                 default -> System.out.println("Invalid choice. Retry.");
             }
         }
         System.out.println("Exiting TMS.");
+    }
+
+    private static void completeTask() {
+        listTask();
+        if (manager.getAll().isEmpty())
+            return;
+
+        while (true) {
+            System.out.println("\n---> What task you completed? <---");
+            int id = getIntInput("Enter id: ");
+            Optional<Task> taskOptional = manager.getById(id);
+            if (taskOptional.isEmpty()) {
+                System.out.println("Task do not exist, choose other id: ");
+                continue;
+            }
+            Task task = taskOptional.get();
+            manager.update(
+                    id,
+                    task.getTitle(),
+                    task.getDescription(),
+                    task.getDate(),
+                    task.getPriority(),
+                    task.getCategory(),
+                    true);
+            System.out.println("Task set completed successfully.");
+            return;
+        }
     }
 
     private static void printMenu() {
@@ -32,7 +60,8 @@ public class Main {
         System.out.println("\t 2. List Tasks");
         System.out.println("\t 3. Update Task");
         System.out.println("\t 4. Delete Task");
-        System.out.println("\t 5. Exit");
+        System.out.println("\t 5. Set as completed");
+        System.out.println("\t 6. Exit");
     }
 
     public static int getIntInput(String prompt) {
@@ -150,7 +179,8 @@ public class Main {
                 newDescription.isEmpty() ? task.getDescription() : newDescription,
                 newDueDate == null ? task.getDate() : newDueDate,
                 newPriority == null ? task.getPriority() : newPriority,
-                newCategory == null ? task.getCategory() : newCategory
+                newCategory == null ? task.getCategory() : newCategory,
+                false
         );
         System.out.println("Task updated successfully");
     }
