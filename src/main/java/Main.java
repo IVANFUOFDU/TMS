@@ -60,15 +60,15 @@ public class Main {
                     return null;
                 return LocalDateTime.parse(input);
             } catch (Exception e) {
-                System.out.println("Invalid date format. Use YYYY-MM-DDT:HH:MM");
+                System.out.println("Invalid date format. Use YYYY-MM-DDTHH:mm:ss");
             }
         }
     }
 
-    public static Priority getPriorityInput() {
+    public static Priority getPriorityInput(String prompt) {
         while (true)
             try {
-                System.out.println("Enter priority (LOW/MEDIUM/HIGH) [default: MEDIUM]");
+                System.out.println(prompt);
                 String input = scanner.nextLine().trim().toUpperCase();
                 if (input.isEmpty())
                     return Priority.MEDIUM;
@@ -79,10 +79,10 @@ public class Main {
     }
 
 
-    public static Category getCategoryInput() {
+    public static Category getCategoryInput(String prompt) {
         while (true)
             try {
-                System.out.println("Enter category (WORK/PERSONAL) [default: PERSONAL]");
+                System.out.println(prompt);
                 String input = scanner.nextLine().trim().toUpperCase();
                 if (input.isEmpty())
                     return Category.PERSONAL;
@@ -97,9 +97,9 @@ public class Main {
         System.out.println("\n---> Add Task <---");
         String title = getStringInput("Enter title: ");
         String description = getStringInput("Enter description: ");
-        LocalDateTime dueDate = getDateTimeInput("Enter due date (YYYY-MM-DDT:HH:MM)");
-        Priority priority = getPriorityInput();
-        Category category = getCategoryInput();
+        LocalDateTime dueDate = getDateTimeInput("Enter due date (YYYY-MM-DDTHH:mm:ss)");
+        Priority priority = getPriorityInput("Enter priority (LOW/MEDIUM/HIGH) [default: MEDIUM]");
+        Category category = getCategoryInput(" Enter category (WORK/PERSONAL) [default: PERSONAL]");
 
         manager.add(title, description, dueDate, priority, category);
         System.out.println("Task added successfully.");
@@ -137,7 +137,22 @@ public class Main {
         }
 
         System.out.println("\n---> Update Task <---");
+        String newTitle = getStringInput("Enter new title (leave blank to keep current): ");
+        String newDescription = getStringInput("Enter new description (leave blank to keep current): ");
+        LocalDateTime newDueDate = getDateTimeInput("Enter new due date (YYYY-MM-DDTHH:mm:ss) (leave blank to keep current): ");
+        Priority newPriority = getPriorityInput("Enter new priority (LOW/MEDIUM/HIGH (leave blank to keep current): ");
+        Category newCategory = getCategoryInput("Enter new category (WORK/PERSONAL) (leave blank to keep current): ");
 
+        Task task = taskOptional.get();
+        manager.update(
+                id,
+                newTitle.isEmpty() ? task.getTitle() : newTitle,
+                newDescription.isEmpty() ? task.getDescription() : newDescription,
+                newDueDate == null ? task.getDate() : newDueDate,
+                newPriority == null ? task.getPriority() : newPriority,
+                newCategory == null ? task.getCategory() : newCategory
+        );
+        System.out.println("Task updated successfully");
     }
 
     public static void deleteTask() {
