@@ -24,6 +24,7 @@ public class Main {
                 default -> System.out.println("Invalid choice. Retry.");
             }
         }
+        manager.save();
         System.out.println("Exiting TMS.");
     }
 

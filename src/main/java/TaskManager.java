@@ -6,10 +6,15 @@ import java.util.Optional;
 public class TaskManager {
     private List<Task> taskList;
     private int nextId;
+    private PersistenceManager persistenceManager;
 
     public TaskManager() {
-        taskList = new ArrayList<>();
-        nextId = 0;
+        persistenceManager = new PersistenceManager();
+        taskList = persistenceManager.loadTasks();
+        if (!taskList.isEmpty())
+            nextId = taskList.getLast().getId() + 1;
+        else
+            nextId = 0;
     }
 
     // CREATE
@@ -50,5 +55,9 @@ public class TaskManager {
     // DELETE
     public boolean delete(int id) {
         return taskList.removeIf(task -> task.getId() == id);
+    }
+
+    public void save() {
+        persistenceManager.save(taskList);
     }
 }
